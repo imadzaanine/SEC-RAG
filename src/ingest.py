@@ -9,7 +9,11 @@ HEADER = {
 
 # SEC EDGAR identifies every company by a CIK number (Central Index Key)
 
-APPLE_CIK = "0000320193"
+COMPANIES = {
+"apple" : "0000320193",
+"amazon": "0001018724",
+"microsoft" : "0000789019"
+}
 
 def get_filing_list(cik):
     # Get the list of filings for a given CIK number from the SEC EDGAR database.
@@ -57,16 +61,17 @@ def download_filing(url, save_path):
     
 
 if __name__ == "__main__":
-    data = get_filing_list(APPLE_CIK)
-    print(data["name"])
-    
-    latest_10k = find_latest_10k_filing(data)
-    print("Latest 10-K Filing:")
-    print("Accession Number:", latest_10k["accession_number"])
-    print("Primary Document:", latest_10k["primary_document"])
-    print("Filing Date:", latest_10k["filing_date"])
-    
-    url = build_filing_url(APPLE_CIK, latest_10k["accession_number"], latest_10k["primary_document"])
-    print("Filing URL:", url)
-    
-    download_filing(url, "data/aapl_10k.htm")
+    for company_name, cik in COMPANIES.items():
+        print(f"\nProcessing {company_name}...")
+        
+        data = get_filing_list(cik)
+        latest_10k = find_latest_10k_filing(data)
+        
+        if latest_10k is None:
+            print(f"No 10-K found for {company_name}, skipping.")
+            continue
+        
+        url = build_filing_url(cik, latest_10k["accession_number"], latest_10k["primary_document"])
+        save_path = f"data/{company_name}_10k.htm"
+        
+        download_filing(url, save_path)
