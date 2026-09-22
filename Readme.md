@@ -121,8 +121,3 @@ sec-rag-project/
 - Evaluation harness (faithfulness/relevance scoring)
 - Re-ranking retrieved chunks with a cross-encoder
 - Multi-year filings for trend analysis over time
-
-## Tech notes worth mentioning in interviews
-
-- Built without a RAG framework to demonstrate understanding of each pipeline stage (chunking strategy, embedding, vector search, prompt grounding) rather than relying on library abstractions.
-- Identified and fixed a real failure mode of naive vector search: similarity ranking alone does not guarantee source diversity across multiple documents, which silently broke comparison-style questions.
