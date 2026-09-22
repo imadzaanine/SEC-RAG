@@ -35,7 +35,8 @@ if query:
     with st.chat_message("assistant"):
         with st.spinner("Retrieving relevant sections and generating answer..."):
             top_chunks = retrieve_chunks_multi(query)
-            answer = generate_answer(query, top_chunks)
+            # Pass everything except the message we just added (which is the current query itself)
+            answer = generate_answer(query, top_chunks, chat_history=st.session_state.messages[:-1])
         
         st.write(answer)
         with st.expander(" View source chunks used"):
